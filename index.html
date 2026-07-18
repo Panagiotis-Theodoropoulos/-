@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover"
+    >
+
+    <meta name="theme-color" content="#ff8fa3">
+
+    <title>Just Us</title>
+
+    <style>
+        :root {
+            --pink: #ff6f91;
+            --light-pink: #ffb3c1;
+            --orange: #ff9671;
+            --yellow: #ffd166;
+            --cream: #fff9f2;
+            --purple: #6f5b7e;
+            --dark: #2f2738;
+            --white: #ffffff;
+
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
+            --safe-left: env(safe-area-inset-left, 0px);
+            --safe-right: env(safe-area-inset-right, 0px);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
+        body {
+            width: 100%;
+            min-height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                Helvetica,
+                sans-serif;
+
+            color: var(--white);
+            background: var(--pink);
+            overscroll-behavior: none;
+            touch-action: manipulation;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            font: inherit;
+        }
+
+        img {
+            display: block;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+
+        .app {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            height: 100dvh;
+            overflow: hidden;
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffb3c1,
+                    #ffd6a5,
+                    #fff1b8
+                );
+        }
+
+        .screen {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(1.02);
+            transition:
+                opacity 0.65s ease,
+                transform 0.65s ease,
+                visibility 0.65s ease;
+        }
+
+        .screen.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 5;
+        }
+
+        /*
+        ========================================
+        WELCOME SCREEN
+        ========================================
+        */
+
+        .welcome-screen {
+            align-items: flex-end;
+            justify-content: center;
+            padding:
+                calc(var(--safe-top) + 22px)
+                calc(var(--safe-right) + 18px)
+                calc(var(--safe-bottom) + 24px)
+                calc(var(--safe-left) + 18px);
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(32, 22, 39, 0.05) 0%,
+                    rgba(32, 22, 39, 0.15) 35%,
+                    rgba(32, 22, 39, 0.84) 100%
+                ),
+                url("0cf6665b-996c-478b-8986-fbf91a1d1260(3).jpeg")
+                center center / cover no-repeat;
+        }
+
+        .welcome-screen::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                radial-gradient(
+                    circle at 20% 15%,
+                    rgba(255, 255, 255, 0.28),
+                    transparent 32%
+                ),
+                linear-gradient(
+                    145deg,
+                    rgba(255, 111, 145, 0.18),
+                    rgba(255, 209, 102, 0.08)
+                );
+            pointer-events: none;
+        }
+
+        .welcome-content {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 430px;
+            padding: 30px 24px 24px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 32px;
+            background: rgba(255, 255, 255, 0.16);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow:
+                0 24px 70px rgba(20, 13, 27, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.35);
+        }
+
+        .eyebrow {
+            margin-bottom: 12px;
+            font-size: 0.72rem;
+            font-weight: 850;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: rgba(255, 255, 255, 0.82);
+        }
+
+        .welcome-title {
+            max-width: 350px;
+            margin-bottom: 16px;
+            font-size: clamp(2.65rem, 12vw, 4.5rem);
+            line-height: 0.98;
+            letter-spacing: -0.055em;
+            text-shadow: 0 5px 25px rgba(0, 0, 0, 0.2);
+        }
+
+        .welcome-title span {
+            display: block;
+            color: #ffd166;
+        }
+
+        .welcome-text {
+            max-width: 340px;
+            color: rgba(255, 255, 255, 0.88);
+            font-size: 1rem;
+            line-height: 1.55;
+        }
+
+        .primary-button {
+            position: relative;
+            width: 100%;
+            min-height: 58px;
+            margin-top: 24px;
+            padding: 16px 22px;
+            overflow: hidden;
+            border-radius: 999px;
+            color: var(--dark);
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #fff5d8
+                );
+            font-size: 1rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow:
+                0 14px 35px rgba(19, 12, 25, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+            transition:
+                transform 0.2s ease,
+                box-shadow 0.2s ease;
+        }
+
+        .primary-button::after {
+            content: "→";
+            position: absolute;
+            top: 50%;
+            right: 22px;
+            transform: translateY(-50%);
+            font-size: 1.25rem;
+        }
+
+        .primary-button:active {
+            transform: scale(0.97);
+            box-shadow:
+                0 8px 20px rgba(19, 12, 25, 0.25),
+                inset 0 1px 0 rgba(255, 255, 255, 0.9);
+        }
+
+        /*
+        ========================================
+        GALLERY SCREEN
+        ========================================
+        */
+
+        .gallery-screen {
+            align-items: stretch;
+            justify-content: stretch;
+            background: var(--dark);
+        }
+
+        .gallery-shell {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .gallery-image {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transform: scale(1.01);
+            transition:
+                opacity 0.3s ease,
+                transform 0.55s ease;
+        }
+
+        .gallery-image.changing {
+            opacity: 0;
+            transform: scale(1.07);
+        }
+
+        .gallery-overlay {
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(25, 17, 31, 0.32) 0%,
+                    transparent 30%,
+                    transparent 48%,
+                    rgba(25, 17, 31, 0.88) 100%
+                );
+            pointer-events: none;
+        }
+
+        .color-glow {
+            position: absolute;
+            right: -90px;
+            bottom: 70px;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255, 111, 145, 0.42);
+            filter: blur(70px);
+            pointer-events: none;
+        }
+
+        .gallery-header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+            width: 100%;
+            padding:
+                calc(var(--safe-top) + 16px)
+                calc(var(--safe-right) + 18px)
+                0
+                calc(var(--safe-left) + 18px);
+        }
+
+        .top-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .mini-label,
+        .photo-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 38px;
+            padding: 9px 14px;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 999px;
+            color: white;
+            background: rgba(30, 22, 37, 0.3);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            font-size: 0.76rem;
+            font-weight: 850;
+            letter-spacing: 0.5px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 5px;
+            margin-top: 14px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, 0.28);
+        }
+
+        .progress-bar {
+            width: 14.285%;
+            height: 100%;
+            border-radius: inherit;
+            background:
+                linear-gradient(
+                    90deg,
+                    #ff6f91,
+                    #ffd166,
+                    #ffffff
+                );
+            transition: width 0.45s ease;
+        }
+
+        .gallery-content {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            z-index: 5;
+            padding:
+                30px
+                calc(var(--safe-right) + 22px)
+                calc(var(--safe-bottom) + 30px)
+                calc(var(--safe-left) + 22px);
+        }
+
+        .gallery-card {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 23px 21px 20px;
+            border: 1px solid rgba(255, 255, 255, 0.26);
+            border-radius: 28px;
+            background: rgba(255, 255, 255, 0.14);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            box-shadow:
+                0 20px 55px rgba(17, 10, 22, 0.28),
+                inset 0 1px 0 rgba(255, 255, 255, 0.28);
+        }
+
+        .memory-symbol {
+            margin-bottom: 9px;
+            color: #ffd166;
+            font-size: 1.4rem;
+        }
+
+        .memory-title {
+            margin-bottom: 9px;
+            font-size: clamp(2rem, 9vw, 3.4rem);
+            line-height: 1;
+            letter-spacing: -0.045em;
+        }
+
+        .memory-text {
+            max-width: 370px;
+            color: rgba(255, 255, 255, 0.84);
+            font-size: 0.96rem;
+            line-height: 1.5;
+        }
+
+        .gesture-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 15px;
+            margin-top: 19px;
+        }
+
+        .swipe-hint {
+            color: rgba(255, 255, 255, 0.63);
+            font-size: 0.76rem;
+            font-weight: 750;
+        }
+
+        .next-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            color: var(--dark);
+            background:
+                linear-gradient(
+                    135deg,
+                    #ffffff,
+                    #ffd166
+                );
+            font-size: 1.35rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.25);
+            transition: transform 0.2s ease;
+        }
+
+        .next-button:active {
+            transform: scale(0.9);
+        }
+
+        /*
+        ========================================
+        FINAL SCREEN
+        ========================================
+        */
+
+        .final-screen {
+            align-items: center;
+            justify-content: center;
+            padding:
+                calc(var(--safe-top) + 22px)
+                calc(var(--safe-right) + 18px)
+                calc(var(--safe-bottom) + 22px)
+                calc(var(--safe-left) + 18px);
+
+            background:
+                linear-gradient(
+                    135deg,
+                    rgba(255, 111, 145, 0.88),
+                    rgba(255, 150, 113, 0.78),
+                    rgba(255, 209, 102, 0.8)
+                ),
+                url("IMG_2331(3).jpeg")
+                center center / cover no-repeat;
+        }
+
+        .final-screen::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(47, 39, 56, 0.18),
+                    rgba(47, 39, 56, 0.55)
+                );
+        }
+
+        .final-card {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 440px;
+            padding: 34px 24px 25px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 34px;
+            background: rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(22px);
+            -webkit-backdrop-filter: blur(22px);
+            box-shadow:
+                0 25px 70px rgba(30, 18, 38, 0.32),
+                inset 0 1px 0 rgba(255, 255, 255, 0.38);
+        }
+
+        .large-heart {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 78px;
+            height: 78px;
+            margin-bottom: 19px;
+            border-radius: 50%;
+            color: #ff5f87;
+            background: rgba(255, 255, 255, 0.92);
+            font-size: 2.7rem;
+            box-shadow: 0 12px 35px rgba(36, 23, 43, 0.18);
+            animation: heartbeat 1.6s ease-in-out infinite;
+        }
+
+        .final-title {
+            margin-bottom: 17px;
+            font-size: clamp(2.35rem, 10vw, 4rem);
+            line-height: 0.99;
+            letter-spacing: -0.055em;
+        }
+
+        .final-title span {
+            display: block;
+            color: #fff1a8;
+        }
+
+        .final-text {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .restart-button {
+            width: 100%;
+            min-height: 56px;
+            margin-top: 25px;
+            padding: 15px 20px;
+            border-radius: 999px;
+            color: var(--dark);
+            background: white;
+            font-size: 0.96rem;
+            font-weight: 900;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(30, 18, 38, 0.22);
+            transition: transform 0.2s ease;
+        }
+
+        .restart-button:active {
+            transform: scale(0.97);
+        }
+
+        /*
+        ========================================
+        FLOATING HEARTS
+        ========================================
+        */
+
+        .hearts {
+            position: fixed;
+            inset: 0;
+            z-index: 20;
+            overflow: hidden;
+            pointer-events: none;
+        }
+
+        .floating-heart {
+            position: absolute;
+            bottom: -60px;
+            color: rgba(255, 255, 255, 0.55);
+            animation: floatHeart linear infinite;
+        }
+
+        .floating-heart:nth-child(1) {
+            left: 8%;
+            font-size: 18px;
+            animation-duration: 9s;
+            animation-delay: 0s;
+        }
+
+        .floating-heart:nth-child(2) {
+            left: 27%;
+            font-size: 29px;
+            animation-duration: 11s;
+            animation-delay: 3s;
+        }
+
+        .floating-heart:nth-child(3) {
+            left: 57%;
+            font-size: 21px;
+            animation-duration: 10s;
+            animation-delay: 5s;
+        }
+
+        .floating-heart:nth-child(4) {
+            left: 82%;
+            font-size: 24px;
+            animation-duration: 12s;
+            animation-delay: 1s;
+        }
+
+        /*
+        ========================================
+        ANIMATIONS
+        ========================================
+        */
+
+        @keyframes heartbeat {
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.1);
+            }
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform:
+                    translateY(0)
+                    rotate(0deg)
+                    scale(0.8);
+                opacity: 0;
+            }
+
+            12% {
+                opacity: 0.65;
+            }
+
+            100% {
+                transform:
+                    translateY(-115vh)
+                    rotate(28deg)
+                    scale(1.15);
+                opacity: 0;
+            }
+        }
+
+        /*
+        ========================================
+        SMALL PHONES
+        ========================================
+        */
+
+        @media (max-width: 380px) {
+            .welcome-content {
+                padding: 25px 20px 20px;
+                border-radius: 27px;
+            }
+
+            .welcome-title {
+                font-size: 2.55rem;
+            }
+
+            .welcome-text {
+                font-size: 0.92rem;
+            }
+
+            .gallery-card {
+                padding: 19px 18px 17px;
+                border-radius: 24px;
+            }
+
+            .memory-title {
+                font-size: 2rem;
+            }
+
+            .memory-text {
+                font-size: 0.88rem;
+            }
+
+            .next-button {
+                width: 46px;
+                height: 46px;
+            }
+
+            .final-card {
+                padding: 29px 20px 21px;
+                border-radius: 28px;
+            }
+        }
+
+        /*
+        ========================================
+        LANDSCAPE PHONES
+        ========================================
+        */
+
+        @media (max-height: 580px) and (orientation: landscape) {
+            .welcome-screen {
+                align-items: center;
+            }
+
+            .welcome-content {
+                max-width: 560px;
+                padding: 22px;
+            }
+
+            .welcome-title {
+                font-size: 2.5rem;
+            }
+
+            .gallery-content {
+                padding-bottom: calc(var(--safe-bottom) + 14px);
+            }
+
+            .gallery-card {
+                max-width: 650px;
+                padding: 16px 19px;
+            }
+
+            .memory-title {
+                font-size: 2rem;
+            }
+
+            .gesture-row {
+                margin-top: 12px;
+            }
+
+            .final-card {
+                max-width: 560px;
+                padding: 22px;
+            }
+
+            .large-heart {
+                width: 60px;
+                height: 60px;
+                margin-bottom: 12px;
+                font-size: 2rem;
+            }
+
+            .final-title {
+                font-size: 2.35rem;
+            }
+        }
+
+        /*
+        ========================================
+        REDUCED MOTION
+        ========================================
+        */
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <main class="app">
+
+        <div class="hearts" aria-hidden="true">
+            <div class="floating-heart">♡</div>
+            <div class="floating-heart">♡</div>
+            <div class="floating-heart">♡</div>
+            <div class="floating-heart">♡</div>
+        </div>
+
+        <!-- WELCOME SCREEN -->
+
+        <section
+            class="screen welcome-screen active"
+            id="welcomeScreen"
+        >
+            <div class="welcome-content">
+
+                <div class="eyebrow">
+                    A little reminder
+                </div>
+
+                <h1 class="welcome-title">
+                    We had
+                    <span>a fight...</span>
+                </h1>
+
+                <p class="welcome-text">
+                    But one difficult moment should never become
+                    more important than all the beautiful moments
+                    we have shared.
+                </p>
+
+                <button
+                    class="primary-button"
+                    id="startButton"
+                    type="button"
+                >
+                    Open this
+                </button>
+
+            </div>
+        </section>
+
+        <!-- GALLERY SCREEN -->
+
+        <section
+            class="screen gallery-screen"
+            id="galleryScreen"
+        >
+            <div
+                class="gallery-shell"
+                id="galleryShell"
+            >
+
+                <img
+                    class="gallery-image"
+                    id="galleryImage"
+                    src="2e12fe77-254f-4f9d-8ec6-963f49578533(3).jpeg"
+                    alt="A memory of us"
+                >
+
+                <div class="gallery-overlay"></div>
+                <div class="color-glow"></div>
+
+                <header class="gallery-header">
+
+                    <div class="top-row">
+
+                        <div class="mini-label">
+                            JUST US
+                        </div>
+
+                        <div
+                            class="photo-number"
+                            id="photoNumber"
+                        >
+                            1 / 7
+                        </div>
+
+                    </div>
+
+                    <div class="progress-track">
+                        <div
+                            class="progress-bar"
+                            id="progressBar"
+                        ></div>
+                    </div>
+
+                </header>
+
+                <div class="gallery-content">
+
+                    <div class="gallery-card">
+
+                        <div class="memory-symbol">
+                            ♡
+                        </div>
+
+                        <h2
+                            class="memory-title"
+                            id="memoryTitle"
+                        >
+                            This is us.
+                        </h2>
+
+                        <p
+                            class="memory-text"
+                            id="memoryText"
+                        >
+                            Happy, silly and completely ourselves.
+                        </p>
+
+                        <div class="gesture-row">
+
+                            <div class="swipe-hint">
+                                Swipe left or tap the arrow
+                            </div>
+
+                            <button
+                                class="next-button"
+                                id="nextButton"
+                                type="button"
+                                aria-label="Show next memory"
+                            >
+                                →
+                            </button>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+        <!-- FINAL SCREEN -->
+
+        <section
+            class="screen final-screen"
+            id="finalScreen"
+        >
+            <div class="final-card">
+
+                <div class="large-heart">
+                    ♥
+                </div>
+
+                <div class="eyebrow">
+                    One last thing
+                </div>
+
+                <h2 class="final-title">
+                    I do not want
+                    <span>to win the fight.</span>
+                </h2>
+
+                <p class="final-text">
+                    I just want us to be okay.
+                    <br><br>
+                    Even when we are angry,
+                    even when we disagree,
+                    and even when things feel difficult,
+                    I still choose us.
+                </p>
+
+                <button
+                    class="restart-button"
+                    id="restartButton"
+                    type="button"
+                >
+                    See it again
+                </button>
+
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        const memories = [
+            {
+                image:
+                    "2e12fe77-254f-4f9d-8ec6-963f49578533(3).jpeg",
+
+                title:
+                    "This is us.",
+
+                text:
+                    "Happy, silly and completely ourselves."
+            },
+
+            {
+                image:
+                    "385af408-ca01-4557-ad7c-b7b4840df4d5(4).jpeg",
+
+                title:
+                    "We love each other.",
+
+                text:
+                    "Even when we do not understand each other perfectly."
+            },
+
+            {
+                image:
+                    "4736e1b4-80df-43ef-acbb-10769e73d47a(3).jpeg",
+
+                title:
+                    "We have fun.",
+
+                text:
+                    "The best moments are always the ones we share."
+            },
+
+            {
+                image:
+                    "eafe4c88-db2b-4358-84df-e1c235f13f7b(3).jpeg",
+
+                title:
+                    "We can be silly.",
+
+                text:
+                    "And somehow that makes everything better."
+            },
+
+            {
+                image:
+                    "IMG_2331(3).jpeg",
+
+                title:
+                    "We choose each other.",
+
+                text:
+                    "Not only on the easy days."
+            },
+
+            {
+                image:
+                    "IMG_2363(3).jpeg",
+
+                title:
+                    "We are a team.",
+
+                text:
+                    "Even when we temporarily forget it."
+            },
+
+            {
+                image:
+                    "a8edecc8-fb95-4286-ba63-b35633502c0d (1)(3).jpeg",
+
+                title:
+                    "Always you. Always me.",
+
+                text:
+                    "One fight cannot change everything we are."
+            }
+        ];
+
+        const welcomeScreen =
+            document.getElementById("welcomeScreen");
+
+        const galleryScreen =
+            document.getElementById("galleryScreen");
+
+        const finalScreen =
+            document.getElementById("finalScreen");
+
+        const galleryShell =
+            document.getElementById("galleryShell");
+
+        const galleryImage =
+            document.getElementById("galleryImage");
+
+        const memoryTitle =
+            document.getElementById("memoryTitle");
+
+        const memoryText =
+            document.getElementById("memoryText");
+
+        const photoNumber =
+            document.getElementById("photoNumber");
+
+        const progressBar =
+            document.getElementById("progressBar");
+
+        const startButton =
+            document.getElementById("startButton");
+
+        const nextButton =
+            document.getElementById("nextButton");
+
+        const restartButton =
+            document.getElementById("restartButton");
+
+        let currentIndex = 0;
+        let touchStartX = 0;
+        let touchEndX = 0;
+        let isChanging = false;
+
+        function preloadImages() {
+            memories.forEach(function(memory) {
+                const image = new Image();
+                image.src = memory.image;
+            });
+
+            const backgroundImage = new Image();
+
+            backgroundImage.src =
+                "0cf6665b-996c-478b-8986-fbf91a1d1260(3).jpeg";
+        }
+
+        function showScreen(screenToShow) {
+            const screens =
+                document.querySelectorAll(".screen");
+
+            screens.forEach(function(screen) {
+                screen.classList.remove("active");
+            });
+
+            screenToShow.classList.add("active");
+        }
+
+        function startGallery() {
+            currentIndex = 0;
+            updateMemory(false);
+            showScreen(galleryScreen);
+        }
+
+        function updateMemory(animate = true) {
+            if (isChanging) {
+                return;
+            }
+
+            isChanging = true;
+
+            const memory = memories[currentIndex];
+
+            const applyMemory = function() {
+                galleryImage.src = memory.image;
+                galleryImage.alt = memory.title;
+
+                memoryTitle.textContent =
+                    memory.title;
+
+                memoryText.textContent =
+                    memory.text;
+
+                photoNumber.textContent =
+                    `${currentIndex + 1} / ${memories.length}`;
+
+                const progress =
+                    ((currentIndex + 1) / memories.length) * 100;
+
+                progressBar.style.width =
+                    `${progress}%`;
+
+                requestAnimationFrame(function() {
+                    galleryImage.classList.remove("changing");
+
+                    setTimeout(function() {
+                        isChanging = false;
+                    }, 330);
+                });
+            };
+
+            if (animate) {
+                galleryImage.classList.add("changing");
+
+                setTimeout(function() {
+                    applyMemory();
+                }, 270);
+            } else {
+                applyMemory();
+            }
+        }
+
+        function showNextMemory() {
+            if (isChanging) {
+                return;
+            }
+
+            if (currentIndex >= memories.length - 1) {
+                showScreen(finalScreen);
+                return;
+            }
+
+            currentIndex++;
+            updateMemory(true);
+        }
+
+        function showPreviousMemory() {
+            if (isChanging || currentIndex === 0) {
+                return;
+            }
+
+            currentIndex--;
+            updateMemory(true);
+        }
+
+        function restartWebsite() {
+            currentIndex = 0;
+            updateMemory(false);
+            showScreen(welcomeScreen);
+        }
+
+        function handleSwipe() {
+            const distance =
+                touchStartX - touchEndX;
+
+            const minimumSwipeDistance = 45;
+
+            if (distance > minimumSwipeDistance) {
+                showNextMemory();
+            }
+
+            if (distance < -minimumSwipeDistance) {
+                showPreviousMemory();
+            }
+        }
+
+        startButton.addEventListener(
+            "click",
+            startGallery
+        );
+
+        nextButton.addEventListener(
+            "click",
+            showNextMemory
+        );
+
+        restartButton.addEventListener(
+            "click",
+            restartWebsite
+        );
+
+        galleryShell.addEventListener(
+            "touchstart",
+            function(event) {
+                touchStartX =
+                    event.changedTouches[0].screenX;
+            },
+            {
+                passive: true
+            }
+        );
+
+        galleryShell.addEventListener(
+            "touchend",
+            function(event) {
+                touchEndX =
+                    event.changedTouches[0].screenX;
+
+                handleSwipe();
+            },
+            {
+                passive: true
+            }
+        );
+
+        document.addEventListener(
+            "keydown",
+            function(event) {
+                if (
+                    !galleryScreen.classList.contains("active")
+                ) {
+                    return;
+                }
+
+                if (event.key === "ArrowRight") {
+                    showNextMemory();
+                }
+
+                if (event.key === "ArrowLeft") {
+                    showPreviousMemory();
+                }
+            }
+        );
+
+        preloadImages();
+    </script>
+
+</body>
+</html>
